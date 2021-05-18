@@ -5,9 +5,8 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
-	"github.com/AnkushJadhav/fynesweeper/components"
+	"github.com/asaskevich/EventBus"
 )
 
 type myTheme struct{}
@@ -34,17 +33,14 @@ func (m myTheme) Size(name fyne.ThemeSizeName) float32 {
 }
 
 func main() {
-	a := app.NewWithID("com.ankush.fynesweeper")
+	a := app.NewWithID("me.ankushjadhav.fynesweeper")
 	w := a.NewWindow("fynesweeper")
 	a.Settings().SetTheme(&myTheme{})
 
-	ts := make([]fyne.CanvasObject, 0)
-	for itr := 0; itr < 100; itr++ {
-		ts = append(ts, components.NewTile(components.TileTypeMineActive))
-	}
+	bus := EventBus.New()
+	game := newGame(bus, 10, 10, 5)
+	initEngine(game, bus)
 
-	c := container.NewGridWithColumns(10, ts...)
-
-	w.SetContent(c)
+	w.SetContent(game.board)
 	w.ShowAndRun()
 }
