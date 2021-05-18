@@ -30,10 +30,11 @@ type TileType int
 type Tile struct {
 	widget.Icon
 
-	Base   TileType
-	IsOpen bool
-	Row    int
-	Col    int
+	Base      TileType
+	IsOpen    bool
+	IsFlagged bool
+	Row       int
+	Col       int
 
 	bus EventBus.Bus
 }
@@ -47,22 +48,22 @@ func NewTile(bus EventBus.Bus, tileType TileType, row, col int) *Tile {
 }
 
 // Open opens a tile
-func (t *Tile) Open() {
+func (t *Tile) Open(byUser bool) {
 	if !t.IsOpen {
-		t.open()
+		t.open(byUser)
 	}
 }
 
 // MouseIn impl for desktop clicks
 func (t *Tile) MouseIn(ev *desktop.MouseEvent) {
-	if ev.Button == desktop.MouseButtonPrimary && !t.IsOpen {
+	if ev.Button == desktop.MouseButtonPrimary && !t.IsOpen && !t.IsFlagged {
 		t.SetResource(resourceType0Png)
 	}
 }
 
 // MouseOut impl for desktop clicks
 func (t *Tile) MouseOut() {
-	if !t.IsOpen {
+	if !t.IsOpen && !t.IsFlagged {
 		t.SetResource(resourceClosedPng)
 	}
 }
@@ -74,30 +75,43 @@ func (t *Tile) MouseMoved(ev *desktop.MouseEvent) {
 
 // MouseDown impl for desktop clicks
 func (t *Tile) MouseDown(ev *desktop.MouseEvent) {
-	if !t.IsOpen {
+	if ev.Button == desktop.MouseButtonPrimary && !t.IsOpen && !t.IsFlagged {
 		t.SetResource(resourceType0Png)
 	}
 }
 
 // MouseUp impl for desktop clicks
 func (t *Tile) MouseUp(ev *desktop.MouseEvent) {
-	if !t.IsOpen {
-		t.open()
+	if ev.Button == desktop.MouseButtonPrimary && !t.IsOpen && !t.IsFlagged {
 		t.bus.Publish(events.EventTileOpened, t.Row, t.Col)
+	}
+	if ev.Button == desktop.MouseButtonSecondary {
+		if !t.IsFlagged {
+			t.flag()
+		}
 	}
 }
 
-func (t *Tile) open() {
-	t.SetResource(getBaseResourceByType(t.Base))
+func (t *Tile) flag() {
+	t.SetResource(resourceFlagPng)
+	t.IsFlagged = true
+}
+
+func (t *Tile) open(byUser bool) {
+	t.SetResource(getBaseResourceByType(t.Base, byUser))
 	t.IsOpen = true
 }
 
-func getBaseResourceByType(t TileType) fyne.Resource {
+func getBaseResourceByType(t TileType, byUser bool) fyne.Resource {
 	var res fyne.Resource
 
 	switch t {
 	case TileTypeMine:
-		res = resourceMineredPng
+		if byUser {
+			res = resourceMineredPng
+		} else {
+			res = resourceMinePng
+		}
 	case TileType0:
 		res = resourceType0Png
 	case TileType1:

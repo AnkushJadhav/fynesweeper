@@ -34,13 +34,13 @@ func (m myTheme) Size(name fyne.ThemeSizeName) float32 {
 
 func main() {
 	a := app.NewWithID("me.ankushjadhav.fynesweeper")
-	w := a.NewWindow("fynesweeper")
 	a.Settings().SetTheme(&myTheme{})
 
 	bus := EventBus.New()
-	game := newGame(bus, 10, 10, 5)
+	game := newGame(bus, 20, 20, 20)
 	initEngine(game, bus)
 
+	w := a.NewWindow("fynesweeper")
 	w.SetContent(game.board)
 	w.ShowAndRun()
 }
