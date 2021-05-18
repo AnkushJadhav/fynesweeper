@@ -14,9 +14,14 @@ func initEngine(game *game, bus EventBus.Bus) {
 
 func tileOpenHandler(game [][]*components.Tile) func(int, int) {
 	return func(row, col int) {
-		if game[row][col].Base == components.TileTypeMine {
+		switch game[row][col].Base {
+		case components.TileTypeMine:
 			fmt.Println("PHATAAA!")
-			return
+			break
+		case components.TileType0:
+			fmt.Println("DO unveiling logic!")
+			break
 		}
+		return
 	}
 }
