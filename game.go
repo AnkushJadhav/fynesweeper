@@ -30,8 +30,6 @@ func newGame(bus EventBus.Bus, rows, cols, mineCount int) *game {
 
 	// generate game tiles based on plan
 	tiles := make([][]*components.Tile, 0)
-
-	// generate a blank plan
 	for itrRow := 0; itrRow < rows; itrRow++ {
 		row := make([]*components.Tile, 0)
 		for itrCol := 0; itrCol < cols; itrCol++ {

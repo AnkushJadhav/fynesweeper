@@ -1,13 +1,22 @@
 package main
 
 import (
+	"fyne.io/fyne/v2"
 	"github.com/AnkushJadhav/fynesweeper/components"
 	"github.com/AnkushJadhav/fynesweeper/events"
 	"github.com/asaskevich/EventBus"
 )
 
-func initEngine(game *game, bus EventBus.Bus) {
+func initEngine(game *game, bus EventBus.Bus, w fyne.Window) {
 	bus.Subscribe(events.EventTileOpened, tileOpenHandler(game.tiles))
+	bus.Subscribe(events.EventSmileyManTriggered, smileyMantriggerHandler(bus, w))
+}
+
+func smileyMantriggerHandler(bus EventBus.Bus, w fyne.Window) func() {
+	return func() {
+		game := newGame(bus, 20, 20, 20)
+		w.SetContent(game.board)
+	}
 }
 
 func tileOpenHandler(tiles [][]*components.Tile) func(int, int) {

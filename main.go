@@ -5,7 +5,9 @@ import (
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/theme"
+	"github.com/AnkushJadhav/fynesweeper/components"
 	"github.com/asaskevich/EventBus"
 )
 
@@ -35,12 +37,15 @@ func (m myTheme) Size(name fyne.ThemeSizeName) float32 {
 func main() {
 	a := app.NewWithID("me.ankushjadhav.fynesweeper")
 	a.Settings().SetTheme(&myTheme{})
-
 	bus := EventBus.New()
-	game := newGame(bus, 20, 20, 20)
-	initEngine(game, bus)
-
 	w := a.NewWindow("fynesweeper")
-	w.SetContent(game.board)
+
+	game := newGame(bus, 20, 20, 20)
+	initEngine(game, bus, w)
+	sm := components.NewSmileyMan(bus, components.GameStateOngoing)
+
+	t := container.NewVBox(sm, game.board)
+
+	w.SetContent(t)
 	w.ShowAndRun()
 }

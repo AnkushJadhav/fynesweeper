@@ -2,5 +2,6 @@ package events
 
 // Game events
 const (
-	EventTileOpened = "EventTileOpened"
+	EventTileOpened         = "EventTileOpened"
+	EventSmileyManTriggered = "EventSmileyManTriggered"
 )
