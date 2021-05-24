@@ -1,27 +1,14 @@
 package game
 
 import (
-	"fyne.io/fyne/v2/container"
 	"github.com/AnkushJadhav/fynesweeper/components"
 )
-
-// Render the game
-func (g *Game) Render() {
-	t := container.NewVBox(g.Smiley, g.Board)
-
-	g.Win.SetContent(t)
-}
-
-func (g *Game) resetHandler() {
-	g.SeedGame(20, 20, 20)
-	g.Render()
-}
 
 func (g *Game) openTile(row, col int) {
 	switch g.Tiles[row][col].Base {
 	case components.TileTypeMine:
 		g.Tiles[row][col].Open(true)
-		endGame(g.Tiles)
+		g.end()
 		break
 	case components.TileType0:
 		revealEdges(g.Tiles, row, col)
@@ -32,14 +19,15 @@ func (g *Game) openTile(row, col int) {
 	return
 }
 
-func endGame(tiles [][]*components.Tile) {
-	for itrRow := 0; itrRow < len(tiles); itrRow++ {
-		for itrCol := 0; itrCol < len(tiles[itrRow]); itrCol++ {
-			if !tiles[itrRow][itrCol].IsOpen {
-				tiles[itrRow][itrCol].Open(false)
+func (g *Game) end() {
+	for itrRow := 0; itrRow < len(g.Tiles); itrRow++ {
+		for itrCol := 0; itrCol < len(g.Tiles[itrRow]); itrCol++ {
+			if !g.Tiles[itrRow][itrCol].IsOpen {
+				g.Tiles[itrRow][itrCol].Open(false)
 			}
 		}
 	}
+	g.Smiley.SetState(components.GameStateLose)
 }
 
 // 8-directional flood fill

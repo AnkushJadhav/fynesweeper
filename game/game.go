@@ -4,6 +4,7 @@ import (
 	"math/rand"
 
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
 	"github.com/AnkushJadhav/fynesweeper/components"
 )
 
@@ -134,6 +135,18 @@ func generatePlan(plan [][]int, mineCount int) [][]int {
 	}
 
 	return plan
+}
+
+// Render the game
+func (g *Game) Render() {
+	t := container.NewVBox(g.Smiley, g.Board)
+
+	g.Win.SetContent(t)
+}
+
+func (g *Game) resetHandler() {
+	g.SeedGame(20, 20, 20)
+	g.Render()
 }
 
 func isInBounds(row, col, minRow, minCol, maxRow, maxCol int) bool {
