@@ -4,8 +4,6 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/widget"
-	"github.com/AnkushJadhav/fynesweeper/events"
-	"github.com/asaskevich/EventBus"
 )
 
 // The different states of a game
@@ -25,12 +23,12 @@ type SmileyMan struct {
 
 	gameState GameState
 
-	bus EventBus.Bus
+	resetHandler func()
 }
 
 // NewSmileyMan creates a new smileyman
-func NewSmileyMan(bus EventBus.Bus, state GameState) *SmileyMan {
-	sm := &SmileyMan{bus: bus, gameState: state}
+func NewSmileyMan(state GameState, resetHandler func()) *SmileyMan {
+	sm := &SmileyMan{gameState: state, resetHandler: resetHandler}
 	sm.ExtendBaseWidget(sm)
 	sm.SetResource(getResourceByGameState(state))
 
@@ -53,7 +51,7 @@ func (sm *SmileyMan) MouseDown(ev *desktop.MouseEvent) {
 func (sm *SmileyMan) MouseUp(ev *desktop.MouseEvent) {
 	if ev.Button == desktop.MouseButtonPrimary {
 		sm.SetResource(getResourceByGameState(GameStateOngoing))
-		sm.bus.Publish(events.EventSmileyManTriggered)
+		sm.resetHandler()
 	}
 }
 

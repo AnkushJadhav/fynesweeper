@@ -1,39 +1,35 @@
-package main
+package game
 
 import (
-	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
 	"github.com/AnkushJadhav/fynesweeper/components"
-	"github.com/AnkushJadhav/fynesweeper/events"
-	"github.com/asaskevich/EventBus"
 )
 
-func initEngine(game *game, bus EventBus.Bus, w fyne.Window) {
-	bus.Subscribe(events.EventTileOpened, tileOpenHandler(game.tiles))
-	bus.Subscribe(events.EventSmileyManTriggered, smileyMantriggerHandler(bus, w))
+// Render the game
+func (g *Game) Render() {
+	t := container.NewVBox(g.Smiley, g.Board)
+
+	g.Win.SetContent(t)
 }
 
-func smileyMantriggerHandler(bus EventBus.Bus, w fyne.Window) func() {
-	return func() {
-		game := newGame(bus, 20, 20, 20)
-		w.SetContent(game.board)
-	}
+func (g *Game) resetHandler() {
+	g.SeedGame(20, 20, 20)
+	g.Render()
 }
 
-func tileOpenHandler(tiles [][]*components.Tile) func(int, int) {
-	return func(row, col int) {
-		switch tiles[row][col].Base {
-		case components.TileTypeMine:
-			tiles[row][col].Open(true)
-			endGame(tiles)
-			break
-		case components.TileType0:
-			revealEdges(tiles, row, col)
-			break
-		default:
-			tiles[row][col].Open(true)
-		}
-		return
+func (g *Game) openTile(row, col int) {
+	switch g.Tiles[row][col].Base {
+	case components.TileTypeMine:
+		g.Tiles[row][col].Open(true)
+		endGame(g.Tiles)
+		break
+	case components.TileType0:
+		revealEdges(g.Tiles, row, col)
+		break
+	default:
+		g.Tiles[row][col].Open(true)
 	}
+	return
 }
 
 func endGame(tiles [][]*components.Tile) {

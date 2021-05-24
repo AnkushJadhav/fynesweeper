@@ -4,8 +4,6 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/driver/desktop"
 	"fyne.io/fyne/v2/widget"
-	"github.com/AnkushJadhav/fynesweeper/events"
-	"github.com/asaskevich/EventBus"
 )
 
 // TileTypes
@@ -36,12 +34,12 @@ type Tile struct {
 	Row       int
 	Col       int
 
-	bus EventBus.Bus
+	OpenHandler func(int, int)
 }
 
 // NewTile creates a new tile of the given type
-func NewTile(bus EventBus.Bus, tileType TileType, row, col int) *Tile {
-	t := &Tile{Base: tileType, IsOpen: false, Row: row, Col: col, bus: bus}
+func NewTile(tileType TileType, row, col int, openHandler func(int, int)) *Tile {
+	t := &Tile{Base: tileType, IsOpen: false, Row: row, Col: col, OpenHandler: openHandler}
 	t.ExtendBaseWidget(t)
 	t.SetResource(resourceClosedPng)
 	return t
@@ -83,7 +81,7 @@ func (t *Tile) MouseDown(ev *desktop.MouseEvent) {
 // MouseUp impl for desktop clicks
 func (t *Tile) MouseUp(ev *desktop.MouseEvent) {
 	if ev.Button == desktop.MouseButtonPrimary && !t.IsOpen && !t.IsFlagged {
-		t.bus.Publish(events.EventTileOpened, t.Row, t.Col)
+		t.OpenHandler(t.Row, t.Col)
 	}
 	if ev.Button == desktop.MouseButtonSecondary {
 		if !t.IsFlagged {

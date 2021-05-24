@@ -1,19 +1,28 @@
-package main
+package game
 
 import (
 	"math/rand"
 
 	"fyne.io/fyne/v2"
 	"github.com/AnkushJadhav/fynesweeper/components"
-	"github.com/asaskevich/EventBus"
 )
 
-type game struct {
-	board *fyne.Container
-	tiles [][]*components.Tile
+// Game is a game damnit
+type Game struct {
+	Board  *fyne.Container
+	Tiles  [][]*components.Tile
+	Smiley *components.SmileyMan
+
+	Win fyne.Window
 }
 
-func newGame(bus EventBus.Bus, rows, cols, mineCount int) *game {
+// NewGame creates a new game
+func NewGame() *Game {
+	return &Game{}
+}
+
+// SeedGame creates a new game damnit
+func (g *Game) SeedGame(rows, cols, mineCount int) {
 	plan := make([][]int, 0)
 
 	// generate a blank plan
@@ -36,34 +45,34 @@ func newGame(bus EventBus.Bus, rows, cols, mineCount int) *game {
 			var tile *components.Tile
 			switch plan[itrRow][itrCol] {
 			case -1:
-				tile = components.NewTile(bus, components.TileTypeMine, itrRow, itrCol)
+				tile = components.NewTile(components.TileTypeMine, itrRow, itrCol, g.openTile)
 				break
 			case 0:
-				tile = components.NewTile(bus, components.TileType0, itrRow, itrCol)
+				tile = components.NewTile(components.TileType0, itrRow, itrCol, g.openTile)
 				break
 			case 1:
-				tile = components.NewTile(bus, components.TileType1, itrRow, itrCol)
+				tile = components.NewTile(components.TileType1, itrRow, itrCol, g.openTile)
 				break
 			case 2:
-				tile = components.NewTile(bus, components.TileType2, itrRow, itrCol)
+				tile = components.NewTile(components.TileType2, itrRow, itrCol, g.openTile)
 				break
 			case 3:
-				tile = components.NewTile(bus, components.TileType3, itrRow, itrCol)
+				tile = components.NewTile(components.TileType3, itrRow, itrCol, g.openTile)
 				break
 			case 4:
-				tile = components.NewTile(bus, components.TileType4, itrRow, itrCol)
+				tile = components.NewTile(components.TileType4, itrRow, itrCol, g.openTile)
 				break
 			case 5:
-				tile = components.NewTile(bus, components.TileType5, itrRow, itrCol)
+				tile = components.NewTile(components.TileType5, itrRow, itrCol, g.openTile)
 				break
 			case 6:
-				tile = components.NewTile(bus, components.TileType6, itrRow, itrCol)
+				tile = components.NewTile(components.TileType6, itrRow, itrCol, g.openTile)
 				break
 			case 7:
-				tile = components.NewTile(bus, components.TileType7, itrRow, itrCol)
+				tile = components.NewTile(components.TileType7, itrRow, itrCol, g.openTile)
 				break
 			case 8:
-				tile = components.NewTile(bus, components.TileType8, itrRow, itrCol)
+				tile = components.NewTile(components.TileType8, itrRow, itrCol, g.openTile)
 				break
 			default:
 			}
@@ -74,9 +83,11 @@ func newGame(bus EventBus.Bus, rows, cols, mineCount int) *game {
 	}
 
 	board := components.NewBoard(tiles)
+	sm := components.NewSmileyMan(components.GameStateOngoing, g.resetHandler)
 
-	g := &game{board: board, tiles: tiles}
-	return g
+	g.Board = board
+	g.Tiles = tiles
+	g.Smiley = sm
 }
 
 func generatePlan(plan [][]int, mineCount int) [][]int {
