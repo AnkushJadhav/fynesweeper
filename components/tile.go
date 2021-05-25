@@ -85,12 +85,12 @@ func (t *Tile) MouseUp(ev *desktop.MouseEvent) {
 	}
 	if ev.Button == desktop.MouseButtonSecondary {
 		if !t.IsFlagged {
-			t.flag()
+			t.Flag()
 		}
 	}
 }
 
-func (t *Tile) flag() {
+func (t *Tile) Flag() {
 	t.SetResource(resourceFlagPng)
 	t.IsFlagged = true
 }

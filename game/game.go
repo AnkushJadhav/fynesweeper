@@ -2,6 +2,7 @@ package game
 
 import (
 	"math/rand"
+	"time"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
@@ -10,9 +11,13 @@ import (
 
 // Game is a game damnit
 type Game struct {
-	Board  *fyne.Container
-	Tiles  [][]*components.Tile
-	Smiley *components.SmileyMan
+	Board       *fyne.Container
+	Tiles       [][]*components.Tile
+	Smiley      *components.SmileyMan
+	MineCounter *components.MineCounter
+
+	OpenCount int
+	WinCount  int
 
 	Win fyne.Window
 }
@@ -86,12 +91,18 @@ func (g *Game) SeedGame(rows, cols, mineCount int) {
 	board := components.NewBoard(tiles)
 	sm := components.NewSmileyMan(components.GameStateOngoing, g.resetHandler)
 
+	mc := components.NewMineCounter(mineCount)
+
 	g.Board = board
 	g.Tiles = tiles
 	g.Smiley = sm
+	g.MineCounter = mc
+	g.OpenCount = 0
+	g.WinCount = (rows * cols) - mineCount
 }
 
 func generatePlan(plan [][]int, mineCount int) [][]int {
+	rand.Seed(time.Now().UnixNano())
 	maxRow := len(plan) - 1
 	maxCol := len(plan[0]) - 1
 	itr := 0
@@ -139,13 +150,13 @@ func generatePlan(plan [][]int, mineCount int) [][]int {
 
 // Render the game
 func (g *Game) Render() {
-	t := container.NewVBox(g.Smiley, g.Board)
+	t := container.NewVBox(container.NewHBox(g.MineCounter.Container, g.Smiley), g.Board)
 
 	g.Win.SetContent(t)
 }
 
 func (g *Game) resetHandler() {
-	g.SeedGame(20, 20, 20)
+	g.SeedGame(20, 20, 1)
 	g.Render()
 }
 

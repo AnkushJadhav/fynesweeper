@@ -38,7 +38,7 @@ func main() {
 	w := a.NewWindow("fynesweeper")
 
 	g := game.NewGame()
-	g.SeedGame(20, 20, 20)
+	g.SeedGame(10, 10, 3)
 	g.Win = w
 	g.Render()
 
