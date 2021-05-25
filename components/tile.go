@@ -35,11 +35,12 @@ type Tile struct {
 	Col       int
 
 	OpenHandler func(int, int)
+	MarkHandler func(int, int)
 }
 
 // NewTile creates a new tile of the given type
-func NewTile(tileType TileType, row, col int, openHandler func(int, int)) *Tile {
-	t := &Tile{Base: tileType, IsOpen: false, Row: row, Col: col, OpenHandler: openHandler}
+func NewTile(tileType TileType, row, col int, openHandler func(int, int), markHandler func(int, int)) *Tile {
+	t := &Tile{Base: tileType, IsOpen: false, Row: row, Col: col, OpenHandler: openHandler, MarkHandler: markHandler}
 	t.ExtendBaseWidget(t)
 	t.SetResource(resourceClosedPng)
 	return t
@@ -83,13 +84,12 @@ func (t *Tile) MouseUp(ev *desktop.MouseEvent) {
 	if ev.Button == desktop.MouseButtonPrimary && !t.IsOpen && !t.IsFlagged {
 		t.OpenHandler(t.Row, t.Col)
 	}
-	if ev.Button == desktop.MouseButtonSecondary {
-		if !t.IsFlagged {
-			t.Flag()
-		}
+	if ev.Button == desktop.MouseButtonSecondary && !t.IsFlagged {
+		t.MarkHandler(t.Row, t.Col)
 	}
 }
 
+// Flag falgs a tile
 func (t *Tile) Flag() {
 	t.SetResource(resourceFlagPng)
 	t.IsFlagged = true

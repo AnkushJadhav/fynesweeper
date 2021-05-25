@@ -1,10 +1,27 @@
 package game
 
 import (
+	"time"
+
 	"github.com/AnkushJadhav/fynesweeper/components"
 )
 
+func (g *Game) startTimer() {
+	for i := 0; i < 999; i++ {
+		if !g.IsRunning {
+			break
+		}
+		g.TimeCounter.Increment()
+		time.Sleep(1 * time.Second)
+	}
+	return
+}
+
 func (g *Game) openTile(row, col int) {
+	if g.OpenCount == 0 {
+		go g.startTimer()
+	}
+
 	switch g.Tiles[row][col].Base {
 	case components.TileTypeMine:
 		g.Tiles[row][col].Open(true)
@@ -23,11 +40,17 @@ func (g *Game) openTile(row, col int) {
 	return
 }
 
+func (g *Game) markTile(row, col int) {
+	g.Tiles[row][col].Flag()
+	g.MineCounter.Decrement()
+}
+
 func (g *Game) win() {
+	g.IsRunning = false
 	for itrRow := 0; itrRow < len(g.Tiles); itrRow++ {
 		for itrCol := 0; itrCol < len(g.Tiles[itrRow]); itrCol++ {
 			if !g.Tiles[itrRow][itrCol].IsOpen {
-				g.Tiles[itrRow][itrCol].Flag()
+				g.markTile(itrRow, itrCol)
 			}
 		}
 	}
@@ -35,6 +58,7 @@ func (g *Game) win() {
 }
 
 func (g *Game) lose() {
+	g.IsRunning = false
 	for itrRow := 0; itrRow < len(g.Tiles); itrRow++ {
 		for itrCol := 0; itrCol < len(g.Tiles[itrRow]); itrCol++ {
 			if !g.Tiles[itrRow][itrCol].IsOpen {

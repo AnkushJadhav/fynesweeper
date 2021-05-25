@@ -15,9 +15,11 @@ type Game struct {
 	Tiles       [][]*components.Tile
 	Smiley      *components.SmileyMan
 	MineCounter *components.MineCounter
+	TimeCounter *components.TimeCounter
 
 	OpenCount int
 	WinCount  int
+	IsRunning bool
 
 	Win fyne.Window
 }
@@ -51,34 +53,34 @@ func (g *Game) SeedGame(rows, cols, mineCount int) {
 			var tile *components.Tile
 			switch plan[itrRow][itrCol] {
 			case -1:
-				tile = components.NewTile(components.TileTypeMine, itrRow, itrCol, g.openTile)
+				tile = components.NewTile(components.TileTypeMine, itrRow, itrCol, g.openTile, g.markTile)
 				break
 			case 0:
-				tile = components.NewTile(components.TileType0, itrRow, itrCol, g.openTile)
+				tile = components.NewTile(components.TileType0, itrRow, itrCol, g.openTile, g.markTile)
 				break
 			case 1:
-				tile = components.NewTile(components.TileType1, itrRow, itrCol, g.openTile)
+				tile = components.NewTile(components.TileType1, itrRow, itrCol, g.openTile, g.markTile)
 				break
 			case 2:
-				tile = components.NewTile(components.TileType2, itrRow, itrCol, g.openTile)
+				tile = components.NewTile(components.TileType2, itrRow, itrCol, g.openTile, g.markTile)
 				break
 			case 3:
-				tile = components.NewTile(components.TileType3, itrRow, itrCol, g.openTile)
+				tile = components.NewTile(components.TileType3, itrRow, itrCol, g.openTile, g.markTile)
 				break
 			case 4:
-				tile = components.NewTile(components.TileType4, itrRow, itrCol, g.openTile)
+				tile = components.NewTile(components.TileType4, itrRow, itrCol, g.openTile, g.markTile)
 				break
 			case 5:
-				tile = components.NewTile(components.TileType5, itrRow, itrCol, g.openTile)
+				tile = components.NewTile(components.TileType5, itrRow, itrCol, g.openTile, g.markTile)
 				break
 			case 6:
-				tile = components.NewTile(components.TileType6, itrRow, itrCol, g.openTile)
+				tile = components.NewTile(components.TileType6, itrRow, itrCol, g.openTile, g.markTile)
 				break
 			case 7:
-				tile = components.NewTile(components.TileType7, itrRow, itrCol, g.openTile)
+				tile = components.NewTile(components.TileType7, itrRow, itrCol, g.openTile, g.markTile)
 				break
 			case 8:
-				tile = components.NewTile(components.TileType8, itrRow, itrCol, g.openTile)
+				tile = components.NewTile(components.TileType8, itrRow, itrCol, g.openTile, g.markTile)
 				break
 			default:
 			}
@@ -90,14 +92,16 @@ func (g *Game) SeedGame(rows, cols, mineCount int) {
 
 	board := components.NewBoard(tiles)
 	sm := components.NewSmileyMan(components.GameStateOngoing, g.resetHandler)
-
 	mc := components.NewMineCounter(mineCount)
+	tc := components.NewTimeCounter(0)
 
 	g.Board = board
 	g.Tiles = tiles
 	g.Smiley = sm
 	g.MineCounter = mc
+	g.TimeCounter = tc
 	g.OpenCount = 0
+	g.IsRunning = true
 	g.WinCount = (rows * cols) - mineCount
 }
 
@@ -150,7 +154,7 @@ func generatePlan(plan [][]int, mineCount int) [][]int {
 
 // Render the game
 func (g *Game) Render() {
-	t := container.NewVBox(container.NewHBox(g.MineCounter.Container, g.Smiley), g.Board)
+	t := container.NewVBox(container.NewHBox(g.MineCounter.Container, g.Smiley, g.TimeCounter.Container), g.Board)
 
 	g.Win.SetContent(t)
 }
