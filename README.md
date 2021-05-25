@@ -23,6 +23,5 @@ This will create an executable in the `bin` folder in the repo.
 * Create custom difficulty game
 * Save game stats locally
 * Save game preferences locally
-* 'About' screen to show info about the app
 * Create downloadable builds for desktop (windows, macOS, linux)
 * Mobile friendly version
