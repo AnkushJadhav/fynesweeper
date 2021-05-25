@@ -9,6 +9,10 @@ import (
 	"github.com/AnkushJadhav/fynesweeper/components"
 )
 
+const (
+	tileSize = 20
+)
+
 // Game is a game damnit
 type Game struct {
 	Board       *fyne.Container
@@ -161,7 +165,10 @@ func (g *Game) Render() {
 	topBar := container.NewBorder(nil, nil, mc, tc, g.Smiley)
 	t := container.NewVBox(topBar, g.Board)
 
+	width := g.Board.Size().Width
+	heigth := g.Board.Size().Height + topBar.Size().Height
 	g.Win.SetContent(t)
+	g.Win.Resize(fyne.NewSize(width, heigth))
 }
 
 func (g *Game) resetHandler() {

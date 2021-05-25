@@ -22,6 +22,7 @@ func main() {
 	g.SeedGame(game.SizeBeginner)
 
 	// render the game
+	w.SetMainMenu(newMenuBar(g))
 	g.Win = w
 	g.Render()
 	w.ShowAndRun()
