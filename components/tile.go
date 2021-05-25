@@ -84,7 +84,7 @@ func (t *Tile) MouseUp(ev *desktop.MouseEvent) {
 	if ev.Button == desktop.MouseButtonPrimary && !t.IsOpen && !t.IsFlagged {
 		t.OpenHandler(t.Row, t.Col)
 	}
-	if ev.Button == desktop.MouseButtonSecondary && !t.IsFlagged {
+	if ev.Button == desktop.MouseButtonSecondary && !t.IsOpen {
 		t.MarkHandler(t.Row, t.Col)
 	}
 }
@@ -93,6 +93,12 @@ func (t *Tile) MouseUp(ev *desktop.MouseEvent) {
 func (t *Tile) Flag() {
 	t.SetResource(resourceFlagPng)
 	t.IsFlagged = true
+}
+
+// Unflag unflags a tile
+func (t *Tile) Unflag() {
+	t.SetResource(resourceClosedPng)
+	t.IsFlagged = false
 }
 
 func (t *Tile) open(byUser bool) {

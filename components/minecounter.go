@@ -53,6 +53,18 @@ func (mc *MineCounter) Decrement() {
 	}
 }
 
+// Increment updates the counter
+func (mc *MineCounter) Increment() {
+	mc.current++
+	if mc.current < 0 {
+		mc.current = 0
+	}
+	numd := getDigits(mc.current)
+	for i := 0; i < mineCounterSize; i++ {
+		mc.digits[i].Set(numd[i])
+	}
+}
+
 func getDigits(number int) []uint {
 	digits := make([]uint, mineCounterSize)
 	for i := 0; i < mineCounterSize; i++ {

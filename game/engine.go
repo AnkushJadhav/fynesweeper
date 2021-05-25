@@ -41,8 +41,13 @@ func (g *Game) openTile(row, col int) {
 }
 
 func (g *Game) markTile(row, col int) {
-	g.Tiles[row][col].Flag()
-	g.MineCounter.Decrement()
+	if !g.Tiles[row][col].IsFlagged {
+		g.Tiles[row][col].Flag()
+		g.MineCounter.Decrement()
+	} else {
+		g.Tiles[row][col].Unflag()
+		g.MineCounter.Increment()
+	}
 }
 
 func (g *Game) win() {
