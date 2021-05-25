@@ -20,6 +20,7 @@ type Game struct {
 	OpenCount int
 	WinCount  int
 	IsRunning bool
+	Size      Size
 
 	Win fyne.Window
 }
@@ -102,6 +103,7 @@ func (g *Game) SeedGame(size Size) {
 	g.TimeCounter = tc
 	g.OpenCount = 0
 	g.IsRunning = true
+	g.Size = size
 	g.WinCount = (size.Rows * size.Cols) - size.Mines
 }
 
@@ -163,7 +165,7 @@ func (g *Game) Render() {
 }
 
 func (g *Game) resetHandler() {
-	g.SeedGame(SizeBeginner)
+	g.SeedGame(g.Size)
 	g.Render()
 }
 
