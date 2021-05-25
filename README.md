@@ -1,5 +1,5 @@
 # fynesweeper
-A clone of the popular game "Minesweeper" made using the [Fyne toolkit](https://fyne.io/).
+A clone of the popular game - "Minesweeper", made using the [Fyne toolkit](https://fyne.io/).
 <p align="center">
     <img alt="screenshot" src="assets/png/demo.png" />
 </p>
