@@ -25,7 +25,7 @@ func NewMineCounter(init int) *MineCounter {
 	c := container.NewHBox()
 	for i := 0; i < mineCounterSize; i++ {
 		h := xw.NewHexWidget()
-		h.SetSize(fyne.NewSize(10, 10))
+		h.SetSize(fyne.NewSize(15, 15))
 		h.SetSlant(0)
 		h.Set(numd[i])
 
