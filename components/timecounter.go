@@ -25,6 +25,7 @@ func NewTimeCounter(init int) *TimeCounter {
 	c := container.NewHBox()
 	for i := 0; i < timeCounterSize; i++ {
 		h := xw.NewHexWidget()
+		h.SetSize(fyne.NewSize(10, 10))
 		h.SetSlant(0)
 		h.Set(numd[i])
 

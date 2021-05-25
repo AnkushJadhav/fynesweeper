@@ -154,7 +154,7 @@ func generatePlan(plan [][]int, mineCount int) [][]int {
 
 // Render the game
 func (g *Game) Render() {
-	t := container.NewVBox(container.NewHBox(g.MineCounter.Container, g.Smiley, g.TimeCounter.Container), g.Board)
+	t := container.NewVBox(container.NewBorder(nil, nil, g.MineCounter.Container, g.TimeCounter.Container, g.Smiley), g.Board)
 
 	g.Win.SetContent(t)
 }
