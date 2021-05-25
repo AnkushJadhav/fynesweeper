@@ -6,9 +6,10 @@ import (
 )
 
 const (
-	appID      = "me.ankushjadhav.fynesweeper"
-	appVersion = "0.0.1"
-	appName    = "fynesweeper"
+	appID        = "me.ankushjadhav.fynesweeper"
+	appVersion   = "0.0.1"
+	appVersionID = "1"
+	appName      = "fynesweeper"
 )
 
 func main() {
