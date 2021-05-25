@@ -14,6 +14,7 @@ const (
 func main() {
 	// create a fyne app
 	a := app.NewWithID(appID)
+	a.SetIcon(resourceIconPng)
 	a.Settings().SetTheme(newCustomTheme())
 	w := a.NewWindow(appName)
 
