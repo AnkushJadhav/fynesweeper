@@ -12,7 +12,7 @@ $ make build
 This will create an executable in the `bin` folder in the repo.
 
 ### Roadmap
-* Beautify the mine counter and timer displays
+* Beautify the top bar to have a more authentic look
 * Create custom difficulty game
 * Save game stats locally
 * 'About' screen to show info about the app
