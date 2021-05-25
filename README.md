@@ -1,6 +1,8 @@
 # fynesweeper
 A clone of the popular game "Minesweeper" made using the [Fyne toolkit](https://fyne.io/).
-<img alt="screenshot" src="assets/png/demo.png" />
+<p align="center">
+    <img alt="screenshot" src="assets/png/demo.png" />
+</p>
 
 ### Building the app locally
 Clone the repo to your machine and run this command inside the folder
