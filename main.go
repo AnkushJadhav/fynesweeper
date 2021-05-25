@@ -6,16 +6,16 @@ import (
 )
 
 const (
-	appID          = "me.ankushjadhav.fynesweeper"
-	appVersion     = "0.0.1"
-	appWindowTitle = "fynesweeper"
+	appID      = "me.ankushjadhav.fynesweeper"
+	appVersion = "0.0.1"
+	appName    = "fynesweeper"
 )
 
 func main() {
 	// create a fyne app
 	a := app.NewWithID(appID)
 	a.Settings().SetTheme(newCustomTheme())
-	w := a.NewWindow(appWindowTitle)
+	w := a.NewWindow(appName)
 
 	// create a new default game
 	g := game.NewGame()
