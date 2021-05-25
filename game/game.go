@@ -30,26 +30,26 @@ func NewGame() *Game {
 }
 
 // SeedGame creates a new game damnit
-func (g *Game) SeedGame(rows, cols, mineCount int) {
+func (g *Game) SeedGame(size Size) {
 	plan := make([][]int, 0)
 
 	// generate a blank plan
-	for itrRow := 0; itrRow < rows; itrRow++ {
+	for itrRow := 0; itrRow < size.Rows; itrRow++ {
 		row := make([]int, 0)
-		for itrCol := 0; itrCol < cols; itrCol++ {
+		for itrCol := 0; itrCol < size.Cols; itrCol++ {
 			row = append(row, 0)
 		}
 		plan = append(plan, row)
 	}
 
 	// generate mines with surrounding info
-	plan = generatePlan(plan, mineCount)
+	plan = generatePlan(plan, size.Mines)
 
 	// generate game tiles based on plan
 	tiles := make([][]*components.Tile, 0)
-	for itrRow := 0; itrRow < rows; itrRow++ {
+	for itrRow := 0; itrRow < size.Rows; itrRow++ {
 		row := make([]*components.Tile, 0)
-		for itrCol := 0; itrCol < cols; itrCol++ {
+		for itrCol := 0; itrCol < size.Cols; itrCol++ {
 			var tile *components.Tile
 			switch plan[itrRow][itrCol] {
 			case -1:
@@ -92,7 +92,7 @@ func (g *Game) SeedGame(rows, cols, mineCount int) {
 
 	board := components.NewBoard(tiles)
 	sm := components.NewSmileyMan(components.GameStateOngoing, g.resetHandler)
-	mc := components.NewMineCounter(mineCount)
+	mc := components.NewMineCounter(size.Mines)
 	tc := components.NewTimeCounter(0)
 
 	g.Board = board
@@ -102,7 +102,7 @@ func (g *Game) SeedGame(rows, cols, mineCount int) {
 	g.TimeCounter = tc
 	g.OpenCount = 0
 	g.IsRunning = true
-	g.WinCount = (rows * cols) - mineCount
+	g.WinCount = (size.Rows * size.Cols) - size.Mines
 }
 
 func generatePlan(plan [][]int, mineCount int) [][]int {
@@ -163,7 +163,7 @@ func (g *Game) Render() {
 }
 
 func (g *Game) resetHandler() {
-	g.SeedGame(20, 20, 1)
+	g.SeedGame(SizeBeginner)
 	g.Render()
 }
 

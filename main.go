@@ -1,49 +1,28 @@
 package main
 
 import (
-	"image/color"
-
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
-	"fyne.io/fyne/v2/theme"
 	"github.com/AnkushJadhav/fynesweeper/game"
 )
 
-type myTheme struct{}
-
-var _ fyne.Theme = (*myTheme)(nil)
-
-func (m myTheme) Color(name fyne.ThemeColorName, variant fyne.ThemeVariant) color.Color {
-	if name == theme.ColorNameBackground {
-		return color.RGBA{192, 192, 192, 1}
-	}
-	return theme.DefaultTheme().Color(name, variant)
-}
-
-func (m myTheme) Font(name fyne.TextStyle) fyne.Resource {
-	return theme.DefaultTheme().Font(name)
-}
-
-func (m myTheme) Icon(name fyne.ThemeIconName) fyne.Resource {
-	return theme.DefaultTheme().Icon(name)
-}
-
-func (m myTheme) Size(name fyne.ThemeSizeName) float32 {
-	if name == theme.SizeNamePadding {
-		return 0
-	}
-	return theme.DefaultTheme().Size(name)
-}
+const (
+	appID          = "me.ankushjadhav.fynesweeper"
+	appVersion     = "0.0.1"
+	appWindowTitle = "fynesweeper"
+)
 
 func main() {
-	a := app.NewWithID("me.ankushjadhav.fynesweeper")
-	a.Settings().SetTheme(&myTheme{})
-	w := a.NewWindow("fynesweeper")
+	// create a fyne app
+	a := app.NewWithID(appID)
+	a.Settings().SetTheme(newCustomTheme())
+	w := a.NewWindow(appWindowTitle)
 
+	// create a new default game
 	g := game.NewGame()
-	g.SeedGame(10, 10, 3)
+	g.SeedGame(game.SizeBeginner)
+
+	// render the game
 	g.Win = w
 	g.Render()
-
 	w.ShowAndRun()
 }
