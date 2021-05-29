@@ -17,11 +17,3 @@ Clone the repo to your machine and run this command inside the folder
 $ make build
 ```
 This will create an executable in the `bin` folder in the repo.
-
-### Roadmap
-* Beautify the top bar to have a more authentic look
-* Create custom difficulty game
-* Save game stats locally
-* Save game preferences locally
-* Create downloadable builds for desktop (windows, macOS, linux)
-* Mobile friendly version
