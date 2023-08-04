@@ -167,8 +167,8 @@ func (g *Game) Render() {
 
 	width := g.Board.Size().Width
 	heigth := g.Board.Size().Height + topBar.Size().Height
-	g.Win.SetContent(t)
 	g.Win.Resize(fyne.NewSize(width, heigth))
+	g.Win.SetContent(t)
 }
 
 func (g *Game) resetHandler() {
